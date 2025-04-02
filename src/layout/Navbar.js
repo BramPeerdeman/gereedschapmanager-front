@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Navbar() 
 {
@@ -6,7 +7,7 @@ export default function Navbar()
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-brand" href="/">
             GereedschapManager
           </a>
 
@@ -42,7 +43,7 @@ export default function Navbar()
             </ul>
           </div> */}
 
-          <button className="btn btn-outline-light">Nieuw Gereedschap</button>
+          <Link className="btn btn-outline-light" to="/addgereedschap">Nieuw Gereedschap</Link>
         </div>
       </nav>
     </div>
