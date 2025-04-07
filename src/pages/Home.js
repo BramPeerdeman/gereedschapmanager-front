@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import axiosInstance from "../axiosConfig";
 
 export default function Home() 
 {
     const [gereedschap,setGereedschap] = useState([]);
 
-    const {id} = useParams();
+    // const {id} = useParams();
 
     useEffect(() => 
     {
@@ -15,13 +15,13 @@ export default function Home()
 
     const loadGereedschap = async () =>
     {
-      const result = await axios.get("http://localhost:8080/gereedschappen");
+      const result = await axiosInstance.get("http://localhost:8080/gereedschappen",);
       setGereedschap(result.data);
     };
 
     const deleteGereedschap = async (id) =>
     {
-      await axios.delete(`http://localhost:8080/gereedschap/${id}`);
+      await axiosInstance.delete(`http://localhost:8080/gereedschap/${id}`);
       loadGereedschap();
     }
 

@@ -1,25 +1,84 @@
-import './App.css';
+import "./App.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import Navbar from './layout/Navbar';
-import Home from './pages/Home';
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import AddGereedschap from './gereedschap/AddGereedschap';
-import EditGereedschap from './gereedschap/EditGereedschap';
-import ViewGereedschap from './gereedschap/ViewGereedschap';
+import Navbar from "./layout/Navbar";
+import Home from "./pages/Home";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AddGereedschap from "./gereedschap/AddGereedschap";
+import EditGereedschap from "./gereedschap/EditGereedschap";
+import ViewGereedschap from "./gereedschap/ViewGereedschap";
+import UploadGereedschap from "./gereedschap/UploadGereedschap";
+import Registration from "./components/Registration";
+import RegistrationSucces from "./components/RegistrationSucces";
+import Login from "./components/Login";
+import LoginSucces from "./components/LoginSucces";
+import { AuthProvider } from "./AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <div className="App">
-      <Router>
-      <Navbar/>
+      <AuthProvider>
+        <Router>
+          <Navbar />
 
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="/addgereedschap" element={<AddGereedschap />} />
-        <Route exact path="/editgereedschap/:id" element={<EditGereedschap />} />
-        <Route exact path="/viewgereedschap/:id" element={<ViewGereedschap />} />
-      </Routes>
-      </Router>
+          <Routes>
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/loginSucces" element={<LoginSucces />} />
+            <Route exact path="/registration" element={<Registration />} />
+            <Route
+              exact
+              path="/registrationSucces"
+              element={<RegistrationSucces />}
+            />
+
+            <Route
+              exact
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path="/addgereedschap"
+              element={
+                <ProtectedRoute>
+                  <AddGereedschap />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path="/editgereedschap/:id"
+              element={
+                <ProtectedRoute>
+                  <EditGereedschap />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path="/uploadgereedschap"
+              element={
+                <ProtectedRoute>
+                  <UploadGereedschap />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path="/viewgereedschap/:id"
+              element={
+                <ProtectedRoute>
+                  <ViewGereedschap />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </div>
   );
 }

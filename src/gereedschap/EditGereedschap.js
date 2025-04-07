@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
+import axiosInstance from "../axiosConfig";
 
 export default function EditGereedschap() 
 {
@@ -24,18 +24,18 @@ export default function EditGereedschap()
   useEffect(() => 
   {
     loadGereedschap();
-  },[])
+  })
 
   const onSubmit = async (e) =>
   {
     e.preventDefault();
-    await axios.put(`http://localhost:8080/gereedschap/${id}`, gereedschap);
+    await axiosInstance.put(`http://localhost:8080/gereedschap/${id}`, gereedschap);
     navigate("/");
   };
 
   const loadGereedschap = async () => 
   {
-    const result = await axios.get(`http://localhost:8080/gereedschap/${id}`);
+    const result = await axiosInstance.get(`http://localhost:8080/gereedschap/${id}`,);
     setGereedschap(result.data);
   }
 
