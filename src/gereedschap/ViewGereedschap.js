@@ -1,10 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import axiosInstance from "../axiosConfig";
 
 export default function ViewGereedschap() 
 {
-
     const [gereedschap, setGereedschap] = useState ({
       name:"",
       location:"",
@@ -20,7 +19,7 @@ export default function ViewGereedschap()
 
     const loadGereedschap = async () =>
     {
-      const result = await axios.get(`http://localhost:8080/gereedschap/${id}`);
+      const result = await axiosInstance.get(`http://localhost:8080/gereedschap/${id}`,);
       setGereedschap(result.data);
     }
 
