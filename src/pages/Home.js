@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../axiosConfig";
+import { useAuth } from "../AuthContext";
 
 export default function Home() {
   const [gereedschap, setGereedschap] = useState([]);
   const [loanedFilter, setLoanedFilter] = useState("all");
+  const { username } = useAuth();
+  const [greeting, setGreeting] = useState("");
 
-  useEffect(() => {
+  useEffect(() => 
+    {
+    const hour = new Date().getHours();
+    if (hour < 12) 
+    {
+      setGreeting("Goedemorgen");
+    } else if (hour < 18) 
+    {
+      setGreeting("Goedemiddag");
+    } else 
+    {
+      setGreeting("Goedenavond");
+    }
+
     loadGereedschap();
   }, []);
 
@@ -36,6 +52,7 @@ export default function Home() {
   return (
     <div className="container">
       <div className="py-4">
+      <h2 className="mb-4">{greeting}, {username}!</h2>
         <div className="mb-3">
           <label className="form-label me-2">Filter op uitgeleend:</label>
           <select
