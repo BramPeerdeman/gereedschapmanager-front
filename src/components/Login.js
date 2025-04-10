@@ -8,29 +8,26 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
   const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
 
-    const loginData = {
-      username,
-      password,
-    };
-
     try {
-      const response = await axios.post('http://localhost:8080/login', loginData);
+      const response = await axios.post('http://localhost:8080/login', {
+        username,
+        password,
+      });
+
       if (response.status === 200) {
-        login();
+        login(username); // <-- hier geven we de username door aan context
         navigate('/');
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Login failed for user. Please retry!');
+        setError('Login mislukt. Probeer opnieuw.');
       }
     } catch (error) {
-      setError('An error occurred. Please retry.');
+      setError('Er is een fout opgetreden. Probeer opnieuw.');
     }
   };
 
@@ -47,7 +44,6 @@ export default function Login() {
                 {error}
               </div>
             )}
-
             <div className="mb-3">
               <label htmlFor="username" className="form-label">Username</label>
               <input
