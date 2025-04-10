@@ -13,6 +13,7 @@ import Login from "./components/Login";
 import LoginSucces from "./components/LoginSucces";
 import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RegisterLoan from "./components/RegisterLoan";
 
 function App() {
   return (
@@ -55,6 +56,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <EditGereedschap />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path="/edituitleen/:id"
+              element={
+                <ProtectedRoute>
+                  <RegisterLoan />
                 </ProtectedRoute>
               }
             />

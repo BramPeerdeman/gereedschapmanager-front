@@ -23,9 +23,18 @@ export default function UploadGereedschap() {
     formData.append("jsonFile", jsonFile);
 
     try {
+
+       // Ask for the username and password
+    const username = prompt("your-username");  // Replace with your actual username
+    const password = prompt("Enter your password:");  // Prompt user for the password
+
+    // Encode username and password in base64
+    const basicAuth = `Basic ${btoa(username + ":" + password)}`;
+
       await axios.post("http://localhost:8080/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization": basicAuth,
         },
       });
       alert("File uploaded successfully!");
