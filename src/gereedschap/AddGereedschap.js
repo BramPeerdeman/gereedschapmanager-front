@@ -7,19 +7,22 @@ export default function AddGereedschap() {
 
   const [gereedschap, setGereedschap] = useState({
     name: "",
-    location: null,  // Locatie als object
-    gebruiker: null,  // Gebruiker als object
+    location: null, // Locatie als object
+    gebruiker: null, // Gebruiker als object
+    type: "",
+    gebruiksInstructies: "",  // Voeg gebruiksInstructies toe
+    vereistVeiligheidscheck: false,  // Voeg vereistVeiligheidscheck toe
   });
 
-  const [gebruikers, setGebruikers] = useState([]); 
-  const [locaties, setLocaties] = useState([]); 
+  const [gebruikers, setGebruikers] = useState([]);
+  const [locaties, setLocaties] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const [gebruikersRes, locatiesRes] = await Promise.all([
           axiosInstance.get("/gebruikers"),
-          axiosInstance.get("/locaties")
+          axiosInstance.get("/locaties"),
         ]);
         setGebruikers(gebruikersRes.data);
         setLocaties(locatiesRes.data);
@@ -30,7 +33,7 @@ export default function AddGereedschap() {
     loadData();
   }, []);
 
-  const { name, location, gebruiker } = gereedschap;
+  const { name, location, gebruiker, type, gebruiksInstructies, vereistVeiligheidscheck } = gereedschap;
 
   const onInputChange = (e) => {
     setGereedschap({ ...gereedschap, [e.target.name]: e.target.value });
@@ -50,9 +53,18 @@ export default function AddGereedschap() {
     setGereedschap({ ...gereedschap, location: selectedLocatie });
   };
 
+  const handleTypeChange = (e) => {
+    const selectedType = e.target.value;
+    setGereedschap({ 
+      ...gereedschap, 
+      type: selectedType,
+      gebruiksInstructies: selectedType === "elektrisch" ? "Draag gehoorbescherming en gebruik een veiligheidsbril." : "",
+      vereistVeiligheidscheck: selectedType === "elektrisch" // Safety check required for "elektrisch"
+    });
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    // Stuur de gereedschap data naar de backend, inclusief de geselecteerde gebruiker en locatie
     await axiosInstance.post("http://localhost:8080/gereedschap", gereedschap);
     navigate("/");
   };
@@ -76,6 +88,22 @@ export default function AddGereedschap() {
                 value={name}
                 onChange={onInputChange}
               />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="type" className="form-label">
+                Type Gereedschap
+              </label>
+              <select
+                className="form-control"
+                name="type"
+                value={type}
+                onChange={handleTypeChange}
+              >
+                <option value="">Kies een type</option>
+                <option value="hand">Handgereedschap</option>
+                <option value="elektrisch">Elektrisch gereedschap</option>
+              </select>
             </div>
 
             {/* Locatie Dropdown */}
@@ -116,14 +144,25 @@ export default function AddGereedschap() {
               </select>
             </div>
 
+            {/* Display Safety Instructions */}
+            {type === "elektrisch" && (
+              <div className="mb-3">
+                <label className="form-label">Veiligheidsinstructies</label>
+                <p>{gebruiksInstructies}</p>
+              </div>
+            )}
+
+            {/* Display Safety Check Requirement */}
+            {type === "elektrisch" && vereistVeiligheidscheck && (
+              <div className="mb-3 text-danger">
+                <p><strong>Doe eerst een veiligheidscheck voor het gebruiken van dit gereedschap!</strong></p>
+              </div>
+            )}
+
             <button type="submit" className="btn btn-outline-primary">
               Verzenden
             </button>
-            <Link
-              type="submit"
-              className="btn btn-outline-danger mx-2"
-              to="/"
-            >
+            <Link type="submit" className="btn btn-outline-danger mx-2" to="/">
               Annuleren
             </Link>
           </form>
